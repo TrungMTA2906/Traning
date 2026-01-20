@@ -11,5 +11,16 @@
   "devDependencies": {
     "@playwright/test": "^1.57.0",
     "@types/node": "^25.0.9"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TrungMTA2906/Traning.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TrungMTA2906/Traning/issues"
+  },
+  "homepage": "https://github.com/TrungMTA2906/Traning#readme"
 }
