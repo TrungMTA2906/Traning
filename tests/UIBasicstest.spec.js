@@ -70,7 +70,7 @@ test('grandit', async({browser})=>{
     console.log(await page.locator("pseudo_window").last().allTextContents());
     //.frameLocator('iframe').locator('#F12Button').click();
     
-    //await expect(page.locator('#PageName')).toContainText('共通');
+    
 
 })
 
