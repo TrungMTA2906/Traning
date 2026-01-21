@@ -97,50 +97,115 @@ test('tongket', async ({ page }) => {
 });
 
 
+test.describe('Gop Test Case', async() => {
+    test('mua hang', async ({ page }) => {
+        await test.step('vao trang', async () => {
+            await page.goto('https://material.playwrightvn.com/02-xpath-product-page.html');
+        })
+        await test.step('mua hang 1', async () => {
+            await page.locator('[data-product-id]').nth(0).click();
+        })
+        await test.step('mua hang 2', async () => {
+            await page.locator('[data-product-id]').nth(1).click({clickCount: 2});
+        })
+        await test.step('mua hang 3', async () => {
+            await page.locator('[data-product-id]').nth(2).click({clickCount: 3});
+        })
+        await test.step('xong thi doi', async () => {
+            await page.pause();
+        })
+    });
 
-test('mua hang', async ({ page }) => {
-    await test.step('vao trang', async () => {
-        await page.goto('https://material.playwrightvn.com/02-xpath-product-page.html');
-    })
-    await test.step('mua hang 1', async () => {
-        await page.locator('[data-product-id]').nth(0).click();
-    })
-    await test.step('mua hang 2', async () => {
-        await page.locator('[data-product-id]').nth(1).click({clickCount: 2});
-    })
-    await test.step('mua hang 3', async () => {
-        await page.locator('[data-product-id]').nth(2).click({clickCount: 3});
-    })
-    await test.step('xong thi doi', async () => {
-        await page.pause();
-    })
+    test('addTask', async ({ page }) => {
+        await test.step('vao trang', async () => {
+            await page.goto('https://material.playwrightvn.com/03-xpath-todo-list.html');
+        })
+        await test.step('add task 1-100', async () => {
+            for (let i = 1; i <= 100; i++) {
+                await page.locator('#new-task').fill('Task ' + i);
+                await page.locator('#add-task').click();
+            }
+        })
+        await test.step('xoa task le', async () => {
+            page.on('dialog', async dialog => {
+                await dialog.accept();
+            })
+            
+            for (let i = 1; i <= 100; i=i+2) {
+                await page.locator(`#task-${i}-delete`).click();           
+            }
+        })
+
+        await test.step('xong thi doi', async () => {
+            await page.pause();
+        })
+    });
+
 });
+
+
+
+
+// Hooks: beforeAll, afterAll, beforeEach, afterEach
+test.describe.serial('Hooks suite', () => {
+    test.beforeAll(async () => {
+        console.log('--- before all test cases ---');
+    });
+
+    test.afterAll(async () => {
+        console.log('--- after all test cases ---');
+    });
+
+    test.beforeEach(async () => {
+        console.log('--- before each test case ---');
+    });
+
+    test.afterEach(async () => {
+        console.log('--- after each test case ---');
+    });
+
+    test('hook test case 1', async ({ page }) => {
+        console.log('--- hook test case 1 ---');
+    });
+
+    test('hook test case 2', async ({ page }) => {
+        console.log('--- hook test case 2 ---');
+    });
+});
+
+
+
+
+test('test demo', async ({ page }) => {
+    await page.goto('https://material.playwrightvn.com/');
+    await expect(page.locator('h1').first()).toHaveText('Tài liệu học automation test');
+    await expect(page.locator('h1').first()).toContainText('automation test');
+});
+
 */
 
-test('addTask', async ({ page }) => {
-    await test.step('vao trang', async () => {
-        await page.goto('https://material.playwrightvn.com/03-xpath-todo-list.html');
-    })
-    await test.step('add task 1-100', async () => {
-        for (let i = 1; i <= 100; i++) {
-            await page.locator('#new-task').fill('Task ' + i);
-            await page.locator('#add-task').click();
-        }
-    })
-    await test.step('xoa task le', async () => {
-        page.on('dialog', async dialog => {
-            await dialog.accept();
-        })
-        
-        for (let i = 1; i <= 100; i++) {
-            if (i % 2 != 0){
-                await page.locator(`//button[@id="todo-${i}-delete"]`).click();       
-            }    
-        }
-    })
+class PageBase {
+    page;
+    xpathDashboard = '#dashboard';
 
-    await test.step('xong thi doi', async () => {
-        await page.pause();
-    })
-});
+    constructor(page) {
+        this.page = page;
+    }
+    async aFunction(){
+        await this.page.goto('https://material.playwrightvn.com/');
+    }
+}
 
+
+class HomePage extends PageBase {
+    xpathDashboard = '#dashboard-home';
+    constructor(page, home) {
+        super(page);
+        this.home = home;
+    }
+}
+const fakePage = {
+    goto: async (url) => console.log('Goto:', url)
+};
+const homePage = new HomePage(fakePage, 'home');
+console.log(homePage);
